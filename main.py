@@ -1,8 +1,8 @@
-#!/usr/local/bin/python
+#!/usr/bin/env python
 
-'''
+"""
 Main program
-'''
+"""
 
 
 import os
@@ -12,19 +12,25 @@ import utils.plugin_manager as plugin_manager
 
 
 def parse_args(plugins):
-    '''
+    """
     Create the base argparser
-    '''
+    """
     import argparse
 
     parser = argparse.ArgumentParser(
-        description='Generate ACS delivrables from ULAM delivrables.')
+        description="Generate ACS delivrables from ULAM delivrables."
+    )
 
     # Main program options
-    parser.add_argument('-c', '--config_dir', nargs='?', dest='config_dir',
-                        help='path to the directory holding the configuration')
+    parser.add_argument(
+        "-c",
+        "--config_dir",
+        nargs="?",
+        dest="config_dir",
+        help="path to the directory holding the configuration",
+    )
 
-    subparsers = parser.add_subparsers(dest='command1')
+    subparsers = parser.add_subparsers(dest="command1")
     plugin_manager.get_argparser(subparsers, plugins)
 
     # Parse command line
@@ -32,11 +38,11 @@ def parse_args(plugins):
 
 
 def run():
-    '''
+    """
     main function
-    '''
+    """
 
-    print __name__, 'Hello'
+    print(__name__, "Hello")
 
     context = {}
 
@@ -46,14 +52,14 @@ def run():
     context["plugins"] = plugins
 
     # Parse args
-    context['args'] = parse_args(plugins)
+    context["args"] = parse_args(plugins)
 
     # Setup plugins
     plugin_list = []
     level = 1
-    while 'command' + str(level) in context['args']:
-        command = 'command' + str(level)
-        plugin = plugins[context['args'][command]]
+    while "command" + str(level) in context["args"]:
+        command = "command" + str(level)
+        plugin = plugins[context["args"][command]]
         plugin_list.append(plugin)
         plugins = plugin.plugins
         level += 1
@@ -70,8 +76,8 @@ def run():
     while plugin_list:
         plugin = plugin_list.pop()
         context = plugin.post(context)
-    print __name__, 'Bye'
+    print(__name__, "Bye")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     run()
